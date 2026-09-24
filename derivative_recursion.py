@@ -1,27 +1,15 @@
-from scipy.differentiate import derivative
+import numpy as np
 
-def centralDiff(f, x, h, n=1):
-    result = 0.0
-    if (n > 1):
-        h = h**(1/n)
-        result = (centralDiff(f, x + h/2, h, n-1)- centralDiff(f, x- h/2, h, n-1))/h
+def higher_order_derivative(x, y, n):
+    """Compute the n-th derivative numerically."""
+    if n == 1:
+        return np.gradient(y, x)
     else:
-        result = (f(x + h/2)- f(x- h/2))/h
-    return result
+        return np.gradient(higher_order_derivative(x, y, n-1), x)
 
+# Example: 3rd derivative of cos(x)
 x = float(input("Enter x: "))
+y = np.cos(x)
+y3 = higher_order_derivative(x, y, 3)
 
-def f(x):
-    return 3*x**2 - 26
-
-
-h = 0.0001
-
-order_num = int(input("Enter order of derivative: "))
-
-
-print("Our Result =", centralDiff(f,x,h,order_num))
-#print("Library function Result =", derivative(f,x,order = 4))
-library_result = derivative(f,x, order = 2).df
-
-print(library_result)
+print(y3)
